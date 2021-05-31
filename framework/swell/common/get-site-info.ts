@@ -19,12 +19,12 @@ const getSiteInfo = async (options?: {
 
   config = getConfig(config)
 
-  const categories = await getCategories(config)
-  const brands = await getVendors(config)
+  const categoriesPromise = getCategories(config)
+  const brandsPromise = getVendors(config)
 
   return {
-    categories,
-    brands,
+    categories: await categoriesPromise,
+    brands: await brandsPromise,
   }
 }
 
