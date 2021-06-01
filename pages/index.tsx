@@ -11,13 +11,14 @@ export async function getStaticProps({
   locales,
 }: GetStaticPropsContext) {
   const config = { locale, locales }
-  const { products } = await commerce.getAllProducts({
+  const productsPromise = commerce.getAllProducts({
     variables: { first: 12 },
     config,
     preview,
   })
   const pagesPromise = commerce.getAllPages({ config, preview })
   const siteInfoPromise = commerce.getSiteInfo({ config, preview })
+  const { products } = await productsPromise
   const { pages } = await pagesPromise
   const { categories, brands } = await siteInfoPromise
 
