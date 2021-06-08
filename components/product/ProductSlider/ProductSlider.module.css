@@ -20,7 +20,7 @@
 
 .leftControl,
 .rightControl {
-  @apply px-8 cursor-pointer;
+  @apply px-9 cursor-pointer;
   transition: background-color 0.2s ease;
 }
 
@@ -35,7 +35,7 @@
 }
 
 .rightControl {
-  @apply border-l;
+  @apply border-l border-accent-0;
 }
 
 .leftControl {
