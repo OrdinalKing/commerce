@@ -18,6 +18,7 @@ export async function getSearchStaticProps({
       categories,
       brands,
     },
+    revalidate: 200,
   }
 }
 

@@ -15,8 +15,8 @@ import getSlug from '@lib/get-slug'
 import rangeMap from '@lib/range-map'
 
 const SORT = Object.entries({
-  'latest-desc': 'Latest arrivals',
   'trending-desc': 'Trending',
+  'latest-desc': 'Latest arrivals',
   'price-asc': 'Price: Low to high',
   'price-desc': 'Price: High to low',
 })
@@ -314,7 +314,7 @@ export default function Search({ categories, brands }: SearchPropsType) {
           )}
 
           {data ? (
-            <Grid layout="normal">
+            <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
               {data.products.map((product: Product) => (
                 <ProductCard
                   variant="simple"
@@ -327,15 +327,16 @@ export default function Search({ categories, brands }: SearchPropsType) {
                   }}
                 />
               ))}
-            </Grid>
+            </div>
           ) : (
-            <Grid layout="normal">
+            <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
               {rangeMap(12, (i) => (
-                <Skeleton key={i} />
+                <Skeleton key={i}>
+                  <div className="w-60 h-60" />
+                </Skeleton>
               ))}
-            </Grid>
-          )}
-        </div>
+            </div>
+          )}        </div>
 
         {/* Sort */}
         <div className="col-span-8 lg:col-span-2 order-2 lg:order-none">
