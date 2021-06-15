@@ -3,9 +3,6 @@
  */
 
 const path = require('path')
-const fs = require('fs')
-const merge = require('deepmerge')
-const prettier = require('prettier')
 
 const PROVIDERS = ['bigcommerce', 'shopify', 'swell', 'vendure', 'local']
 
@@ -20,6 +17,23 @@ function getProviderName() {
       ? 'swell'
       : 'local')
   )
+}
+
+function merge(a, b) {
+  if (a === undefined) return b
+  if (b === undefined) return a
+  if (typeof a === 'object' && a && typeof b === 'object' && b) {
+    if (Array.isArray(a) && Array.isArray(b)) {
+      return a.concat(b)
+    } else {
+      const merged = {}
+      for (const key of new Set([...Object.keys(a), ...Object.keys(b)])) {
+        merged[key] = merge(a[key], b[key])
+      }
+      return merged
+    }
+  }
+  return b
 }
 
 function withCommerceConfig(nextConfig = {}) {
@@ -50,13 +64,21 @@ function withCommerceConfig(nextConfig = {}) {
 
   // Update paths in `tsconfig.json` to point to the selected provider
   if (config.commerce.updateTSConfig !== false) {
-    const staticTsconfigPath = path.join(process.cwd(), 'tsconfig.json')
-    const tsconfig = require('../../tsconfig.js')
+    let fs
+    try {
+      fs = require('fs')
+    } catch (e) {}
+    // Only when we have a filesystem
+    if (fs) {
+      const prettier = require('prettier')
+      const staticTsconfigPath = path.join(process.cwd(), 'tsconfig.json')
+      const tsconfig = require('../../tsconfig.js')
 
-    fs.writeFileSync(
-      staticTsconfigPath,
-      prettier.format(JSON.stringify(tsconfig), { parser: 'json' })
-    )
+      fs.writeFileSync(
+        staticTsconfigPath,
+        prettier.format(JSON.stringify(tsconfig), { parser: 'json' })
+      )
+    }
   }
 
   return config
