@@ -9,6 +9,7 @@ function getAllProductPathsOperation({ commerce }: OperationContext<Provider>) {
     config,
   }: {
     config?: Partial<LocalConfig>
+    preview?: boolean
   } = {}): Promise<T['data']> {
     const cfg = commerce.getConfig(config)
     const { data } = await cfg.restFetch('/products/paths')
