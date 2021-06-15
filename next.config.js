@@ -20,6 +20,7 @@ module.exports = withCommerceConfig({
     locales: ['en-US', 'es'],
     defaultLocale: 'en-US',
   },
+  async env() {},
   rewrites() {
     return [
       (isBC || isShopify || isSwell || isVendure) && {
