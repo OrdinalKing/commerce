@@ -1,30 +1,18 @@
-import { OperationContext } from '@commerce/api/operations'
-import { Category } from '@commerce/types/site'
-import { LocalConfig } from '../index'
+import type { OperationContext } from '@commerce/api/operations'
+import type { GetSiteInfoOperation } from '@commerce/types/site'
+import type { LocalConfig, Provider } from '..'
 
-export type GetSiteInfoResult<
-  T extends { categories: any[]; brands: any[] } = {
-    categories: Category[]
-    brands: any[]
-  }
-> = T
-
-export default function getSiteInfoOperation({}: OperationContext<any>) {
-  function getSiteInfo({
-    query,
-    variables,
-    config: cfg,
+export default function getSiteInfoOperation({
+  commerce,
+}: OperationContext<Provider>) {
+  return async function getSiteInfo<T extends GetSiteInfoOperation>({
+    config,
   }: {
-    query?: string
-    variables?: any
     config?: Partial<LocalConfig>
-    preview?: boolean
-  } = {}): Promise<GetSiteInfoResult> {
-    return Promise.resolve({
-      categories: [],
-      brands: [],
-    })
-  }
+  } = {}): Promise<T['data']> {
+    const cfg = commerce.getConfig(config)
+    const { data } = await cfg.restFetch('/site')
 
-  return getSiteInfo
+    return data
+  }
 }

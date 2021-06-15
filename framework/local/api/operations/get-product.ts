@@ -1,26 +1,20 @@
-import type { LocalConfig } from '../index'
-import { Product } from '@commerce/types/product'
-import { GetProductOperation } from '@commerce/types/product'
-import data from '../../data.json'
 import type { OperationContext } from '@commerce/api/operations'
+import type { GetProductOperation } from '@commerce/types/product'
+import type { LocalConfig, Provider } from '..'
 
-export default function getProductOperation({
-  commerce,
-}: OperationContext<any>) {
-  async function getProduct<T extends GetProductOperation>({
-    query = '',
+function getProductOperation({ commerce }: OperationContext<Provider>) {
+  return async function getProduct<T extends GetProductOperation>({
     variables,
     config,
   }: {
-    query?: string
-    variables?: T['variables']
+    variables: T['variables']
     config?: Partial<LocalConfig>
-    preview?: boolean
-  } = {}): Promise<Product | {} | any> {
-    return Promise.resolve({
-      product: data.products[0],
-    })
-  }
+  }): Promise<T['data']> {
+    const cfg = commerce.getConfig(config)
+    const { data } = await cfg.restFetch<any>(`/product/${variables.slug}`)
 
-  return getProduct
+    return data
+  }
 }
+
+export default getProductOperation

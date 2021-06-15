@@ -1,6 +1,6 @@
 import { FetcherError } from '@commerce/utils/errors'
 import type { RestFetcher } from '@commerce/api'
-import { getCommerceApi } from '../index'
+import { getCommerceApi } from '..'
 import fetch from './fetch'
 
 const fetchGraphqlApi: RestFetcher = async (url: string, fetchOptions) => {

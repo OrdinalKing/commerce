@@ -1,12 +1,20 @@
-export type Page = any
-export type GetPageResult = { page?: Page }
-export type PageVariables = {
-  id: number
-}
+import type { OperationContext } from '@commerce/api/operations'
+import type { GetPageOperation } from '@commerce/types/page'
+import type { LocalConfig, Provider } from '..'
 
-export default function getPageOperation() {
-  function getPage(): Promise<GetPageResult> {
-    return Promise.resolve({})
+export default function getPageOperation({
+  commerce,
+}: OperationContext<Provider>) {
+  return async function getPage<T extends GetPageOperation>({
+    variables,
+    config,
+  }: {
+    variables: T['variables']
+    config?: Partial<LocalConfig>
+  }): Promise<T['data']> {
+    const cfg = commerce.getConfig(config)
+    const { data } = await cfg.restFetch<any>(`/page/${variables.id}`)
+
+    return data
   }
-  return getPage
 }
