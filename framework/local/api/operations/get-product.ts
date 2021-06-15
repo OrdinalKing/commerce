@@ -9,6 +9,7 @@ function getProductOperation({ commerce }: OperationContext<Provider>) {
   }: {
     variables: T['variables']
     config?: Partial<LocalConfig>
+    preview?: boolean
   }): Promise<T['data']> {
     const cfg = commerce.getConfig(config)
     const { data } = await cfg.restFetch<any>(`/product/${variables.slug}`)

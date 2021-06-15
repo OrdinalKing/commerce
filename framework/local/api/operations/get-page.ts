@@ -11,6 +11,7 @@ export default function getPageOperation({
   }: {
     variables: T['variables']
     config?: Partial<LocalConfig>
+    preview?: boolean
   }): Promise<T['data']> {
     const cfg = commerce.getConfig(config)
     const { data } = await cfg.restFetch<any>(`/page/${variables.id}`)
