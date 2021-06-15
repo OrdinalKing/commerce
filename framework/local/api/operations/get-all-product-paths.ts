@@ -1,15 +1,20 @@
-import data from '../../data.json'
+import type { OperationContext } from '@commerce/api/operations'
+import type { GetAllProductPathsOperation } from '@commerce/types/product'
+import type { LocalConfig, Provider } from '..'
 
-export type GetAllProductPathsResult = {
-  products: Array<{ path: string }>
-}
+function getAllProductPathsOperation({ commerce }: OperationContext<Provider>) {
+  return async function getAllProductPaths<
+    T extends GetAllProductPathsOperation
+  >({
+    config,
+  }: {
+    config?: Partial<LocalConfig>
+  } = {}): Promise<T['data']> {
+    const cfg = commerce.getConfig(config)
+    const { data } = await cfg.restFetch('/products/paths')
 
-export default function getAllProductPathsOperation() {
-  function getAllProductPaths(): Promise<GetAllProductPathsResult> {
-    return Promise.resolve({
-      products: data.products.map(({ path }) => ({ path })),
-    })
+    return data
   }
-
-  return getAllProductPaths
 }
+
+export default getAllProductPathsOperation

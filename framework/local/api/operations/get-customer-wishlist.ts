@@ -1,6 +1,22 @@
-export default function getCustomerWishlistOperation() {
-  function getCustomerWishlist(): any {
-    return { wishlist: {} }
+import type { OperationContext } from '@commerce/api/operations'
+import type { GetCustomerWishlistOperation } from '@commerce/types/wishlist'
+import type { LocalConfig, Provider } from '..'
+
+function getCustomerWishlistOperation({
+  commerce,
+}: OperationContext<Provider>) {
+  return async function getCustomerWishlist<
+    T extends GetCustomerWishlistOperation
+  >({
+    config,
+  }: {
+    config?: Partial<LocalConfig>
+  } = {}): Promise<T['data']> {
+    const cfg = commerce.getConfig(config)
+    const { data } = await cfg.restFetch<any>('/wishlist')
+
+    return data
   }
-  return getCustomerWishlist
 }
+
+export default getCustomerWishlistOperation
