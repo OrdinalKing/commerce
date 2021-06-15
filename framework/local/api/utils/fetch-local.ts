@@ -1,28 +1,14 @@
 import { FetcherError } from '@commerce/utils/errors'
-import type { GraphQLFetcher } from '@commerce/api'
+import type { RestFetcher } from '@commerce/api'
 import { getCommerceApi } from '../index'
 import fetch from './fetch'
 
-const fetchGraphqlApi: GraphQLFetcher = async (
-  query: string,
-  { variables, preview } = {},
-  fetchOptions
-) => {
+const fetchGraphqlApi: RestFetcher = async (url: string, fetchOptions) => {
   const config = getCommerceApi().getConfig()
-  const res = await fetch(config.commerceUrl, {
-    ...fetchOptions,
-    method: 'POST',
-    headers: {
-      ...fetchOptions?.headers,
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify({
-      query,
-      variables,
-    }),
-  })
+  const res = await fetch(`${config.commerceUrl}${url}`, fetchOptions)
 
   const json = await res.json()
+
   if (json.errors) {
     throw new FetcherError({
       errors: json.errors ?? [{ message: 'Failed to fetch for API' }],
